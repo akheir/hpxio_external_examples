@@ -43,12 +43,13 @@ endif()
 ################################################################################
 # Build and Create Executable
 ################################################################################
+link_directories(/home/alireza/lib/hpx/lib)
 
 set(example_programs
 	hello_world)
 
 set(hello_world_FLAGS DEPENDENCIES
-	iostreams_component local_file_component)
+	iostreams_component local_file)
 
 foreach(example_program ${example_programs})
 	set(sources ${example_program}.cpp)
