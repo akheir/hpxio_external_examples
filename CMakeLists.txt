@@ -47,17 +47,16 @@ link_directories(/home/alireza/lib/hpx/lib)
 
 set(example_programs
 	hello_world
-  hello_world_agas)
-
-set(hello_world_FLAGS DEPENDENCIES
-	iostreams_component local_file)
-
-set(hello_world_agas_FLAGS DEPENDENCIES
-  iostreams_component local_file)
+  hello_world_agas
+  hello_world_server
+  hello_world_client
+  )
 
 foreach(example_program ${example_programs})
 	set(sources ${example_program}.cpp)
 	source_group("Source Files" FILES ${sources})
+  set(${example_program}_FLAGS DEPENDENCIES
+    iostreams_component local_file)
 
 	add_hpx_executable(${example_program}
 	SOURCES ${sources}
