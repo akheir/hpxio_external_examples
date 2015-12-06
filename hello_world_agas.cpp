@@ -29,10 +29,24 @@ int hpx_main()
 
 		// we open the file and write a small message
 		lf.open_sync(filename, "w");
-		std::string message = "Hellow World!\n";
+		std::string message = "Hellow World from the parrent process!\n";
 		lf.write_sync(std::vector<char> (message.begin(), message.end()));
 
-		lf.close_sync();
+		// register the filename through AGAS.
+		hpx::register_with_basename(filename, lf.get_gid(), 0);
+
+		/////////////////////////////////////////
+		//This section suppose to run in another process
+		// we have the file and querry the AGAS.
+		// And create new client with gid
+		hpx::io::local_file lf2(
+			hpx::find_from_basename(filename, 0).get());
+		std::string message2 = "Hellow World from the child process!\n";
+		lf2.write_sync(std::vector<char> (message2.begin(), message2.end()));
+
+
+		//somebody should close the file or not!
+		lf2.close_sync();
 
 	}
 	return hpx::finalize();
