@@ -12,7 +12,7 @@
 #include <hpx/include/iostreams.hpp>
 #include <hpx/include/runtime.hpp>
 
-int hpx_main()
+int hpx_main(boost::program_options::variables_map& vm)
 {
 	{
 		//defining a type for hpxio local file component, aka server.
@@ -28,7 +28,7 @@ int hpx_main()
 		// And create new client with gid
 		hpx::io::local_file lf_client(
 			hpx::find_from_basename(filename, 0).get());
-		std::string message = "Hellow World from the client process!\n";
+		std::string message = vm["message"].as<std::string>();
 		lf_client.write_sync(std::vector<char> (message.begin(), message.end()));
 
 	}
@@ -47,6 +47,10 @@ int main(int argc, char* argv[])
     desc_commandline.add_options()
         ( "file", value<std::string>()->default_value("output"),
           "filename that client should connect to([default: output)")
+
+          ( "message", value<std::string>()->default_value(
+          	"Hellow World from the client process!\n"),
+          " the message that will be written in file.")
         ;
 	// Initialize and run HPX, enforce connect mode as we connect to an existing application.
 	std::vector<std::string> cfg;
